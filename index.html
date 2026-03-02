@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>RoyalScan | Mobile Ready</title>
+    <title>RoyalScan | 100% Fixed</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -11,91 +11,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --maroon: #2a0101;
-            --gold: #d4af37;
-            --gold-light: #f7e08a;
-            --glass: rgba(15, 1, 1, 0.92);
-        }
-
-        /* Essential Mobile Fix: Using dvh for real-time height adjustment */
+        :root { --gold: #d4af37; --glass: rgba(15, 1, 1, 0.95); --maroon: #2a0101; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { 
-            margin: 0; padding: 0; 
-            font-family: 'Poppins', sans-serif; 
-            height: 100dvh; width: 100%; 
-            overflow: hidden; background: #000; color: white; 
-        }
+        body, html { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; height: 100dvh; background: #000; color: white; overflow: hidden; }
 
-        .bg-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), 
-                        url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069');
-            background-size: cover; background-position: center;
-        }
-
+        .bg-container { position: fixed; inset: 0; z-index: -2; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069') center/cover; }
         .heart { position: absolute; pointer-events: none; z-index: 1; animation: heartFall linear infinite; opacity: 0; }
-        @keyframes heartFall {
-            0% { transform: translateY(-10dvh) rotate(0deg) scale(0.5); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(110dvh) rotate(360deg) scale(1.5); opacity: 0; }
-        }
+        @keyframes heartFall { 0% { transform: translateY(-10dvh) scale(0.5); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(110dvh) scale(1.5); opacity: 0; } }
 
-        /* Page Layout Fix */
-        .page { 
-            display: none; height: 100dvh; width: 100%; 
-            padding: 20px; flex-direction: column; 
-            align-items: center; justify-content: center; 
-            position: absolute; top: 0; z-index: 10;
-            overflow-y: auto; /* Allows scrolling on small phones */
-        }
-        .page.active { display: flex; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        .page { display: none; height: 100dvh; width: 100%; padding: 20px; flex-direction: column; align-items: center; justify-content: center; position: absolute; top: 0; z-index: 10; }
+        .page.active { display: flex; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card {
-            background: var(--glass); backdrop-filter: blur(15px);
-            border: 1.5px solid var(--gold); border-radius: 25px;
-            padding: 30px 20px; width: 100%; max-width: 380px; text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            margin: auto; /* Centers card in scrollable area */
-        }
-
-        h1 { font-family: 'Cinzel'; color: var(--gold); margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
+        .card { background: var(--glass); border: 1.5px solid var(--gold); border-radius: 25px; padding: 30px 20px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        h1 { font-family: 'Cinzel'; color: var(--gold); margin: 0; font-size: 1.8rem; }
         .line { width: 40px; height: 2px; background: var(--gold); margin: 12px auto; }
-
-        input { 
-            width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; 
-            border: 1px solid rgba(212, 175, 55, 0.4); background: rgba(255,255,255,0.05); 
-            color: white; font-size: 16px; /* Prevents auto-zoom on iPhone */
-        }
         
-        .btn {
-            width: 100%; padding: 15px; border-radius: 50px; border: none;
-            font-family: 'Cinzel'; font-weight: bold; cursor: pointer;
-            background: linear-gradient(45deg, #b8860b, var(--gold-light)); color: var(--maroon);
-            margin-top: 8px; font-size: 0.9rem; letter-spacing: 1px;
-        }
+        input { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid var(--gold); background: rgba(255,255,255,0.05); color: white; font-size: 16px; outline: none; }
+        .btn { width: 100%; padding: 15px; border-radius: 50px; border: none; font-family: 'Cinzel'; font-weight: bold; cursor: pointer; background: linear-gradient(45deg, #b8860b, #f7e08a); color: var(--maroon); margin-top: 8px; font-size: 0.9rem; }
         .btn-outline { background: transparent; border: 1.5px solid var(--gold); color: var(--gold); }
 
-        /* QR & Scanner Mobile Fix */
-        #qr-canvas-jpg { 
-            background: white; padding: 10px; border-radius: 15px; 
-            width: 220px; height: 220px; margin: 15px auto; display: block;
-            box-shadow: 0 0 15px rgba(255,255,255,0.1);
-        }
-        #reader { width: 100% !important; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
+        /* QR DISPLAY FIX: This container will hold the QR as a real image element */
+        #qr-container { background: white; padding: 15px; border-radius: 15px; margin: 15px auto; display: inline-block; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+        #qr-container img { display: block; width: 200px; height: 200px; }
 
-        #grid { 
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; 
-            width: 100%; max-height: 40vh; overflow-y: auto; margin-top: 15px;
-            padding: 5px;
-        }
+        #reader { width: 100% !important; border-radius: 15px; overflow: hidden; margin-bottom: 10px; }
+        #grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-height: 40vh; overflow-y: auto; margin-top: 15px; }
         .thumb { border-radius: 8px; border: 1px solid var(--gold); overflow: hidden; }
         .thumb img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
 
-        #audio-toggle { position: fixed; top: 15px; right: 15px; z-index: 100; background: var(--gold); width: 42px; height: 42px; border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        
-        .footer-brand { margin-top: 20px; font-size: 0.7rem; opacity: 0.7; letter-spacing: 1px; }
+        #audio-toggle { position: fixed; top: 15px; right: 15px; z-index: 100; background: var(--gold); width: 42px; height: 42px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -109,85 +54,59 @@
         <div class="card">
             <h1>RoyalScan</h1>
             <div class="line"></div>
-            <input type="text" id="l-user" placeholder="Username" autocomplete="off">
+            <input type="text" id="l-user" placeholder="Username">
             <input type="password" id="l-pass" placeholder="Password">
             <button class="btn" onclick="handleLogin()">Unlock Gallery</button>
-            <p onclick="nav('sign-p')" style="margin-top:15px; font-size:0.8rem; cursor:pointer;">New? <u>Register Now</u></p>
-            <div class="footer-brand">Made by Kalpit Wakade</div>
+            <p onclick="nav('sign-p')" style="margin-top:15px; font-size:0.8rem; cursor:pointer;">New? <u>Register</u></p>
+            <div style="margin-top:15px; font-size:0.7rem; opacity:0.6;">Crafted by Kalpit Wakade</div>
         </div>
     </div>
 
     <div id="sign-p" class="page">
-        <div class="card">
-            <h1>Register</h1>
-            <div class="line"></div>
-            <input type="text" id="s-user" placeholder="New Username">
-            <input type="password" id="s-pass" placeholder="New Password">
-            <button class="btn" onclick="handleSignup()">Create Account</button>
-            <button class="btn btn-outline" onclick="nav('login-p')">Back</button>
-        </div>
+        <div class="card"><h1>Join</h1><input type="text" id="s-user" placeholder="User"><input type="password" id="s-pass" placeholder="Pass"><button class="btn" onclick="handleSignup()">Join</button></div>
     </div>
 
     <div id="home-p" class="page">
-        <div class="card">
-            <h1 id="greet" style="font-size: 1.4rem;">Welcome</h1>
-            <div class="line"></div>
-            <button class="btn" onclick="nav('up-p')">Host: Upload Media</button>
-            <button class="btn btn-outline" style="margin-top:15px;" onclick="nav('scan-p')">Guest: Scan QR</button>
-            <p onclick="location.reload()" style="margin-top:25px; color:#ff4d4d; cursor:pointer; font-size:0.8rem; font-weight:bold;">LOGOUT</p>
-        </div>
+        <div class="card"><h1 id="greet">Welcome</h1><div class="line"></div>
+        <button class="btn" onclick="nav('up-p')">Host: Upload</button>
+        <button class="btn btn-outline" style="margin-top:15px;" onclick="nav('scan-p')">Guest: Scan</button>
+        <p onclick="location.reload()" style="margin-top:25px; color:#ff4d4d; cursor:pointer;">LOGOUT</p></div>
     </div>
 
     <div id="up-p" class="page">
-        <div class="card">
-            <h1>Host Panel</h1>
-            <div class="line"></div>
-            <input type="file" id="f" multiple accept="image/*" hidden onchange="handleUpload(this)">
-            <button class="btn" onclick="document.getElementById('f').click()">Select Photos</button>
-            <p id="st" style="color:var(--gold-light); margin:10px 0; font-size:0.8rem;"></p>
-            <button id="qr-btn" class="btn" style="display:none; background:#1b5e20; color:white;" onclick="genQR()">Generate JPG QR</button>
-            <button class="btn btn-outline" onclick="nav('home-p')">Back</button>
-        </div>
+        <div class="card"><h1>Host</h1><div class="line"></div>
+        <input type="file" id="f" multiple accept="image/*" hidden onchange="handleUpload(this)">
+        <button class="btn" onclick="document.getElementById('f').click()">Select Photos</button>
+        <p id="st" style="margin:10px 0; font-size:0.8rem; color:var(--gold);"></p>
+        <button id="qr-btn" class="btn" style="display:none;" onclick="genQR()">Generate Access QR</button>
+        <button class="btn btn-outline" onclick="nav('home-p')">Back</button></div>
     </div>
 
     <div id="qr-p" class="page">
         <div class="card">
             <h1>Event Access</h1>
             <div class="line"></div>
-            <div id="qr-hidden" style="display:none;"></div>
-            <canvas id="qr-canvas-jpg"></canvas>
-            <button class="btn" onclick="saveQR()">Download JPG QR</button>
+            
+            <div id="qr-container"></div>
+            
+            <p style="font-size: 0.7rem; color: #d4af37; margin-bottom: 10px;">Long press on QR to save or click below</p>
+            <button class="btn" onclick="saveQR()">Save QR as JPG</button>
             <button class="btn btn-outline" onclick="nav('home-p')">Done</button>
         </div>
     </div>
 
     <div id="scan-p" class="page">
-        <div class="card">
-            <h1>Scan QR</h1>
-            <div class="line"></div>
-            <div id="reader"></div>
-            <div id="scan-ui">
-                <button class="btn" onclick="startCamera()">📸 Open Camera</button>
-                <div style="margin:10px 0; font-size:0.8rem; opacity:0.5;">— OR —</div>
-                <input type="file" id="qr-file" accept="image/*" hidden onchange="scanFile(this)">
-                <button class="btn btn-outline" onclick="document.getElementById('qr-file').click()">🖼️ Upload QR Image</button>
-            </div>
-            <button class="btn btn-outline" id="stop-btn" style="display:none; margin-top:10px;" onclick="stopCamera()">Cancel</button>
-            <button class="btn btn-outline" onclick="nav('home-p')" style="margin-top:10px;">Back</button>
-        </div>
+        <div class="card"><h1>Scan</h1><div id="reader"></div><button class="btn" onclick="startCamera()">📸 Open Camera</button>
+        <input type="file" id="qr-file" accept="image/*" hidden onchange="scanFile(this)">
+        <button class="btn btn-outline" onclick="document.getElementById('qr-file').click()" style="margin-top:10px;">🖼️ Upload QR</button>
+        <button class="btn btn-outline" onclick="nav('home-p')" style="margin-top:10px;">Back</button></div>
     </div>
 
-    <div id="gal-p" class="page">
-        <div class="card" style="max-width:95%; height:92dvh; justify-content: flex-start;">
-            <h1>Gallery</h1>
-            <div id="grid"></div>
-            <button class="btn btn-outline" onclick="nav('home-p')" style="margin-top:15px;">Exit</button>
-        </div>
-    </div>
+    <div id="gal-p" class="page"><div class="card" style="max-width:95%; height:90dvh;"><h1>Gallery</h1><div id="grid"></div><button class="btn btn-outline" onclick="nav('home-p')" style="margin-top:15px;">Exit</button></div></div>
 
     <script>
         let db; let scanner; let musicOn = false;
-        const req = indexedDB.open("RoyalScanV4", 1);
+        const req = indexedDB.open("RoyalScanVFinal", 1);
         req.onupgradeneeded = e => e.target.result.createObjectStore("photos", { autoIncrement: true });
         req.onsuccess = e => db = e.target.result;
 
@@ -199,7 +118,7 @@
 
         function toggleMusic() {
             const a = document.getElementById('event-audio');
-            if(musicOn) a.pause(); else a.play().catch(e => console.log("User interaction needed"));
+            if(musicOn) a.pause(); else a.play().catch(e => console.log("Play blocked"));
             musicOn = !musicOn;
         }
 
@@ -210,9 +129,8 @@
                 document.getElementById('greet').innerText = "Namaste, " + u;
                 document.getElementById('audio-toggle').style.display = "flex";
                 if(!musicOn) toggleMusic();
-                confetti({ particleCount: 100, spread: 60, origin: { y: 0.7 } });
-                nav('home-p');
-            } else { alert("Login Failed!"); }
+                confetti({ particleCount: 80, spread: 50 }); nav('home-p');
+            } else alert("Invalid!");
         }
 
         function handleSignup() {
@@ -229,53 +147,53 @@
                 const tx = db.transaction("photos", "readwrite");
                 await tx.objectStore("photos").add(files[i]);
             }
-            st.innerText = "✨ Upload Complete!";
-            document.getElementById('qr-btn').style.display = 'block';
+            st.innerText = "✨ Success!"; document.getElementById('qr-btn').style.display = 'block';
         }
 
+        // --- NEW NO-CANVAS QR LOGIC ---
         function genQR() {
-            const hidden = document.getElementById('qr-hidden');
-            hidden.innerHTML = "";
+            const container = document.getElementById('qr-container');
+            container.innerHTML = ""; // Clear
             const url = window.location.href.split('#')[0] + "#event-access";
-            new QRCode(hidden, { text: url, width: 400, height: 400 });
+            
+            // Generate QR - Library automatically creates an <img> tag inside
+            new QRCode(container, {
+                text: url,
+                width: 256,
+                height: 256,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
 
-            setTimeout(() => {
-                const img = hidden.querySelector('img');
-                const canvas = document.getElementById('qr-canvas-jpg');
-                const ctx = canvas.getContext('2d');
-                canvas.width = 400; canvas.height = 400;
-                ctx.fillStyle = "#FFFFFF";
-                ctx.fillRect(0, 0, 400, 400);
-                ctx.drawImage(img, 0, 0);
-                nav('qr-p');
-            }, 600);
+            nav('qr-p');
         }
 
         function saveQR() {
-            const canvas = document.getElementById('qr-canvas-jpg');
-            const link = document.createElement('a');
-            link.href = canvas.toDataURL("image/jpeg", 0.9);
-            link.download = "RoyalScan_QR.jpg";
-            link.click();
+            const qrImg = document.querySelector('#qr-container img');
+            if(!qrImg) return alert("QR not ready");
+            
+            // Direct download link
+            const a = document.createElement('a');
+            a.href = qrImg.src;
+            a.download = "RoyalScan_QR.jpg";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
 
         function startCamera() {
             document.getElementById('reader').style.display = 'block';
-            document.getElementById('scan-ui').style.display = 'none';
-            document.getElementById('stop-btn').style.display = 'block';
             scanner = new Html5Qrcode("reader");
             scanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (txt) => {
                 if(txt.includes("event-access")) { scanner.stop(); nav('gal-p'); }
-            }).catch(err => alert("Camera Error: " + err));
+            });
         }
-
-        function stopCamera() { if(scanner) scanner.stop().then(() => location.reload()); }
 
         function scanFile(input) {
             if(input.files[0]) {
                 const s = new Html5Qrcode("reader");
-                s.scanFile(input.files[0], true).then(txt => { if(txt.includes("event-access")) nav('gal-p'); })
-                .catch(err => alert("QR not found in this image."));
+                s.scanFile(input.files[0], true).then(txt => { if(txt.includes("event-access")) nav('gal-p'); });
             }
         }
 
@@ -291,27 +209,24 @@
                     div.innerHTML = `<img src="${url}">`;
                     div.onclick = () => {
                         const a = document.createElement('a'); a.href = url;
-                        a.download = `Royal_Photo_${Date.now()}.jpg`;
-                        a.click();
+                        a.download = `Photo_${Date.now()}.jpg`; a.click();
                     };
                     grid.appendChild(div); cursor.continue();
                 }
             };
         }
 
-        // Animated Hearts
+        // Hearts Animation
         const hb = document.getElementById('heart-box');
-        const icons = ['💖', '💝', '✨', '❤️', '💕', '❣️'];
         for(let i=0; i<30; i++) {
             const h = document.createElement('div'); h.className = 'heart';
-            h.innerHTML = icons[Math.floor(Math.random()*icons.length)];
+            h.innerHTML = ['💝','✨','❤️','💕'][Math.floor(Math.random()*4)];
             h.style.left = Math.random() * 100 + 'vw';
-            h.style.fontSize = (Math.random() * 15 + 20) + 'px';
-            h.style.animationDuration = (Math.random() * 3 + 4) + 's';
-            h.style.animationDelay = Math.random() * 5 + 's';
+            h.style.fontSize = (Math.random()*15 + 20) + 'px';
+            h.style.animationDuration = (Math.random()*3 + 4) + 's';
+            h.style.animationDelay = Math.random()*5 + 's';
             hb.appendChild(h);
         }
-
         window.onload = () => { if(window.location.hash === "#event-access") nav('login-p'); };
     </script>
 </body>
